@@ -208,14 +208,12 @@ export default function FindScholarships() {
                                             {applying[s.id] ? '⏳' : '📬'} Track Application
                                         </button>
                                     )}
-                                    <a
-                                        href={s.applicationUrl}
+                                    <Link
+                                        to={`/scholarships/${s.id}`}
                                         className="btn btn-outline btn-sm"
-                                        target="_blank"
-                                        rel="noopener noreferrer"
                                     >
-                                        🔗 View Details (DEMO URL)
-                                    </a>
+                                        🔎 View Details
+                                    </Link>
                                     {appSuccess[s.id] && (
                                         <span className="badge badge-green" style={{ alignSelf: 'center' }}>
                                             {appSuccess[s.id]}

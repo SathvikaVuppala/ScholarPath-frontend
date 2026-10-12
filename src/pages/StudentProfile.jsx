@@ -94,14 +94,8 @@ export default function StudentProfile() {
         };
 
         try {
-            let res;
-            if (studentId && student) {
-                res = await studentApi.update(studentId, payload);
-                setSuccess('Profile updated successfully! ✅');
-            } else {
-                res = await studentApi.create(payload);
-                setSuccess('Profile created successfully! Your document checklist has been set up. ✅');
-            }
+            const res = await studentApi.update(studentId, payload);
+            setSuccess('Profile updated successfully! ✅');
             saveStudent(res.data);
             setIsEditing(false);
         } catch (err) {

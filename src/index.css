@@ -244,6 +244,73 @@ body {
   color: var(--gray-700);
 }
 
+.account-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 32px 16px;
+  background: linear-gradient(135deg, var(--gray-50), var(--blue-100));
+}
+
+.account-card {
+  width: min(100%, 620px);
+  padding: 32px;
+  border: 1px solid var(--gray-200);
+  border-radius: var(--radius-lg);
+  background: var(--white);
+  box-shadow: var(--shadow-lg);
+}
+
+.account-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 28px;
+}
+
+.account-brand .brand-name {
+  color: var(--navy-800);
+}
+
+.account-subtitle {
+  color: var(--gray-500);
+  font-size: 0.75rem;
+}
+
+.account-form {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.account-form .form-group:has([name="password"]),
+.account-submit {
+  grid-column: 1 / -1;
+}
+
+.account-submit {
+  justify-content: center;
+}
+
+.account-switch,
+.account-note {
+  margin-top: 20px;
+  text-align: center;
+  color: var(--gray-600);
+  font-size: 0.875rem;
+}
+
+.account-switch a {
+  color: var(--navy-600);
+  font-weight: 700;
+}
+
+.account-note {
+  color: var(--gray-500);
+  font-size: 0.75rem;
+}
+
 .page-content {
   padding: 32px;
   flex: 1;
@@ -746,6 +813,75 @@ tr:hover td {
   padding-top: 12px;
 }
 
+.scholarship-detail-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.scholarship-detail-title {
+  margin-top: 8px;
+}
+
+.scholarship-detail {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.scholarship-detail-section {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.scholarship-criteria {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 12px;
+}
+
+.scholarship-criterion {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 14px;
+  border: 1px solid var(--gray-200);
+  border-radius: var(--radius-md);
+  background: var(--gray-50);
+}
+
+.scholarship-criterion-label {
+  color: var(--gray-500);
+  font-size: 0.78rem;
+}
+
+.scholarship-criterion-value {
+  color: var(--navy-800);
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+.scholarship-detail-meta {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
+  padding: 16px;
+  background: var(--gray-50);
+  border-radius: var(--radius-md);
+}
+
+.scholarship-documents {
+  padding-left: 22px;
+  color: var(--gray-700);
+  font-size: 0.875rem;
+}
+
+.scholarship-documents li + li {
+  margin-top: 6px;
+}
+
 /* ---- Document Checklist ---- */
 .document-item {
   display: flex;
@@ -936,5 +1072,15 @@ tr:hover td {
   }
   .main-content {
     margin-left: 0;
+  }
+  .account-card {
+    padding: 24px 18px;
+  }
+  .account-form {
+    grid-template-columns: 1fr;
+  }
+  .account-form .form-group:has([name="password"]),
+  .account-submit {
+    grid-column: auto;
   }
 }

@@ -7,13 +7,41 @@ const api = axios.create({
     baseURL: API_BASE,
     headers: { 'Content-Type': 'application/json' },
     timeout: 10000,
+    withCredentials: true,
 });
+
+let csrfToken = null;
+let csrfRequest = null;
+
+api.interceptors.request.use(async config => {
+    const method = config.method?.toLowerCase();
+    if (['post', 'put', 'patch', 'delete'].includes(method) && !config.url?.endsWith('/auth/csrf')) {
+        if (!csrfToken) {
+            csrfRequest ??= api.get('/auth/csrf')
+                .then(res => { csrfToken = res.data.token; })
+                .finally(() => { csrfRequest = null; });
+            await csrfRequest;
+        }
+        config.headers['X-XSRF-TOKEN'] = csrfToken;
+    }
+    return config;
+});
+
+// ---- Authentication APIs ----
+export const authApi = {
+    me: () => api.get('/auth/me'),
+    register: (data) => api.post('/auth/register', data),
+    login: (data) => api.post('/auth/login', data),
+    async logout() {
+        await api.post('/auth/logout');
+        csrfToken = null;
+    },
+};
 
 // ---- Student APIs ----
 export const studentApi = {
     getById: (id) => api.get(`/students/${id}`),
     getByEmail: (email) => api.get(`/students/by-email/${encodeURIComponent(email)}`),
-    create: (data) => api.post('/students', data),
     update: (id, data) => api.put(`/students/${id}`, data),
 };
 

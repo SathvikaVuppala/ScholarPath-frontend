@@ -1,5 +1,6 @@
 import { NavLink, useLocation } from 'react-router-dom';
 import { useStudent } from '../context/StudentContext';
+import { useState } from 'react';
 
 const navItems = [
     { to: '/', label: 'Dashboard', icon: '🏠' },
@@ -20,13 +21,28 @@ const pageTitles = {
 };
 
 export default function Layout({ children }) {
-    const { student } = useStudent();
+    const { student, logout } = useStudent();
     const location = useLocation();
+    const [loggingOut, setLoggingOut] = useState(false);
+    const [logoutError, setLogoutError] = useState('');
 
-    const title = pageTitles[location.pathname] || 'ScholarPath';
+    const title = pageTitles[location.pathname] ||
+        (location.pathname.startsWith('/scholarships/') ? 'Scholarship Details' : 'ScholarPath');
     const initials = student?.fullName
         ? student.fullName.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2)
         : 'SP';
+
+    const handleLogout = async () => {
+        setLoggingOut(true);
+        setLogoutError('');
+        try {
+            await logout();
+        } catch {
+            setLogoutError('Could not log out. Please try again.');
+        } finally {
+            setLoggingOut(false);
+        }
+    };
 
     return (
         <div className="app-layout">
@@ -75,10 +91,18 @@ export default function Layout({ children }) {
                         <span className="student-name-display">
                             {student ? student.fullName : 'Guest Student'}
                         </span>
+                        <button
+                            className="btn btn-outline btn-sm"
+                            onClick={handleLogout}
+                            disabled={loggingOut}
+                        >
+                            {loggingOut ? 'Logging out…' : 'Log out'}
+                        </button>
                     </div>
                 </header>
 
                 <main className="page-content">
+                    {logoutError && <div className="alert alert-error">{logoutError}</div>}
                     {children}
                 </main>
             </div>
