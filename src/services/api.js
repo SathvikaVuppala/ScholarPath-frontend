@@ -1,7 +1,10 @@
 import axios from 'axios';
 
-// When using Vite proxy, use relative /api paths
-const API_BASE = '/api';
+// Set VITE_API_BASE_URL to the deployed backend origin plus /api.
+// Local development uses the Vite /api proxy.
+const API_BASE = import.meta.env.VITE_API_BASE_URL || '/api';
+
+console.log('ScholarPath API base URL:', API_BASE);
 
 const api = axios.create({
     baseURL: API_BASE,
@@ -9,6 +12,15 @@ const api = axios.create({
     timeout: 10000,
     withCredentials: true,
 });
+
+function requireStudentResponse(response) {
+    const student = response.data;
+    if (!student || typeof student !== 'object' ||
+        !Number.isInteger(student.id) || typeof student.fullName !== 'string') {
+        throw new Error('The authentication endpoint did not return a student profile.');
+    }
+    return response;
+}
 
 let csrfToken = null;
 let csrfRequest = null;
@@ -29,9 +41,9 @@ api.interceptors.request.use(async config => {
 
 // ---- Authentication APIs ----
 export const authApi = {
-    me: () => api.get('/auth/me'),
+    me: () => api.get('/auth/me').then(requireStudentResponse),
     register: (data) => api.post('/auth/register', data),
-    login: (data) => api.post('/auth/login', data),
+    login: (data) => api.post('/auth/login', data).then(requireStudentResponse),
     async logout() {
         await api.post('/auth/logout');
         csrfToken = null;
