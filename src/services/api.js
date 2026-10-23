@@ -25,6 +25,16 @@ function requireStudentResponse(response) {
 let csrfToken = null;
 let csrfRequest = null;
 
+function getCsrfCookie() {
+    const cookie = document.cookie
+        .split('; ')
+        .find(item => item.startsWith('XSRF-TOKEN='));
+
+    return cookie
+        ? decodeURIComponent(cookie.substring('XSRF-TOKEN='.length))
+        : null;
+}
+
 api.interceptors.request.use(async config => {
     const method = config.method?.toLowerCase();
     if (['post', 'put', 'patch', 'delete'].includes(method) && !config.url?.endsWith('/auth/csrf')) {
